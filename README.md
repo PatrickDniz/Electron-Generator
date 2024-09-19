@@ -1,3 +1,13 @@
+# Releitura
+> Nesta releitura do projeto geratron original foram adicionadas algumas funcionalidades, sendo elas:
+ - botão de visibilidade do input
+ - alteração no botão de copia do input
+ - criação da geração de CPF e CNPJ
+ - criação da geração de Telefone e Celular
+
+
+# Projeto Original
+
 # Geratron
 > Geratron é um Aplicativo Desktop feito em Electron, desenvolvido para gerar senhas seguras e customizáveis de forma fácil e segura.
 ![Print do Aplicativo](https://github.com/thiagowaib/geratron/blob/main/.github/frame2.png?raw=true)
