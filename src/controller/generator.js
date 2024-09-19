@@ -7,8 +7,58 @@ const inpCount       = document.getElementById("inpCount");
 const spanCount      = document.getElementById("range-value");
 const arrRdStyle     = document.getElementsByClassName("rdStyle");
 const arrChkAlphabet = document.getElementsByClassName("chkAlphabet");
-const btnCopy        = document.getElementById("btnCopy");
+const btnCopy        = document.getElementById("icoCopy");
+const btnVisibility  = document.getElementById("icoHidden");
 const classifier     = document.getElementById("classifier");
+const display        = document.getElementById("section-display");
+const secGenerator   = document.getElementById("section-generator");
+const secPassword    = document.getElementById("section-password");
+const secDocument    = document.getElementById("section-document");
+const secPhone       = document.getElementById("section-phone");
+const selectPassword = document.getElementById("select-password");
+const selectDocument = document.getElementById("select-document");
+const selectPhone    = document.getElementById("select-phone");
+
+
+/**
+ * Selecionar qual o Gerador atual
+ */
+const setGeneratorIdentity = (elem) => {
+    const selected = document.querySelector("#section-generator .selected");
+    selected.classList.remove("selected");
+    elem.classList.add("selected");
+}
+const selectGeneratorColor = (elem) => {
+    const selected = document.querySelector("#section-select .selected");
+    selected.classList.remove("selected");
+    elem.classList.add("selected");
+}
+
+const reloadGeneratorSelected = () => {
+    const selected = document.querySelector("#section-select .selected");
+    const type = selected.dataset.type;
+    icoReload.dataset.selected = type;
+}
+selectPassword.onclick = () => {
+    selectGeneratorColor(selectPassword);
+    setGeneratorIdentity(secPassword);
+    reloadGeneratorSelected();
+    reloadInput();
+}
+selectDocument.onclick = () => {
+    selectGeneratorColor(selectDocument);
+    setGeneratorIdentity(secDocument);
+    reloadGeneratorSelected();
+    reloadInput();
+}
+selectPhone.onclick = () => {
+    selectGeneratorColor(selectPhone);
+    setGeneratorIdentity(secPhone);
+    reloadGeneratorSelected();
+    reloadInput();
+}
+
+
 
 /**
  * Parâmetros de Geração da Senha
@@ -102,7 +152,23 @@ const generatePassword = () => {
  * Copia a senha
  */
 const copyPassword = () => {
-    navigator.clipboard.writeText(password);
+    navigator.clipboard.writeText(inpPassword.value);
+}
+
+/**
+ * Toggle visibilidade do input
+ */
+const visibilityPassword = () => {
+    const visibility = btnVisibility.dataset.hidden;
+
+    if(visibility == "hidden") {
+        display.dataset.hidden = "visible"
+        btnVisibility.dataset.hidden = "visible" 
+        return
+    }
+
+    display.dataset.hidden = "hidden"
+    btnVisibility.dataset.hidden = "hidden"  
 }
 
 /**
@@ -159,8 +225,24 @@ for(let i = 0; i<arrChkAlphabet.length; i++){
 /**
  * Ao clicar no icone de Recarregar, gera uma nova senha
  */
+const reloadInput = () => {
+    const selected = icoReload.dataset.selected;
+    switch (selected) {
+        case 'password':
+            generatePassword();
+            break;
+        case 'phone':
+            generatePhone()
+            break;
+        case 'document':
+            generateDocument()
+            break;
+        default:
+            generatePassword();
+    }
+}
 icoReload.onclick = () => {
-    generatePassword();
+    reloadInput();   
 }
 
 /**
@@ -171,8 +253,181 @@ btnCopy.onclick = () => {
 }
 
 /**
+ * Ao clicar no botao de Visibilidade, deixa visivel as informações na area de transferência
+ */
+btnVisibility.onclick = () => {
+    visibilityPassword();
+}
+
+/**
  * Ao carregar a tela, gera a primeira senha com os parâmetros default
  */
 window.onload = () => {
-    generatePassword();
+    reloadInput();
+
+    const selected = document.querySelector("#section-select .selected");
+    selected.click();
 }
+
+// Telefone\
+function generatePhone() {
+    const numCharacters = document.getElementById('num-caracteres').value;
+    const phoneType = document.getElementById('tipo-telefone').value;
+    
+    let number = '';
+    if (phoneType === 'celular') {
+        number = '9' + generateRandomDigits(numCharacters - 1);
+    } else {
+        number = generateRandomDigits(numCharacters);
+    }
+
+    applyResultPhone(number);
+}
+
+function generateRandomDigits(digits) {
+    let numbers = '';
+    for (let i = 0; i < digits; i++) {
+        numbers += Math.floor(Math.random() * 10);
+    }
+    return numbers;
+}
+
+function applyMaskPhone(number, phoneType) {
+    const numCharacters = document.getElementById('num-caracteres').value;
+
+    if (phoneType === 'celular' && numCharacters == 9) {
+        return `(${generateRandomDigits(2)}) ${number.substring(0, 5)}-${number.substring(5)}`;
+    } else {
+        return `(${generateRandomDigits(2)}) ${number.substring(0, 4)}-${number.substring(4)}`;
+    }
+}
+
+function applyResultPhone(number) {
+    const mask = document.getElementById('mascara').checked;
+    const phoneType = document.getElementById('tipo-telefone').value;
+
+    if (mask) {
+        number = applyMaskPhone(number, phoneType);
+    }
+
+    inpPassword.value = number;
+}
+
+document.getElementById('mascara').addEventListener('change', () => {
+    const currentNumber = inpPassword.value.replace(/\D/g, ''); 
+    if (currentNumber) {
+        applyResultPhone(currentNumber);
+    }
+});
+
+document.getElementById('num-caracteres').addEventListener('change', generatePhone);
+document.getElementById('tipo-telefone').addEventListener('change', generatePhone);
+
+
+// CPF e CNPJ
+function generateDocument() {
+    const documentType = document.getElementById('document-type').value;
+    let documentNumber = '';
+
+    if (documentType === 'cpf') {
+        documentNumber = generateCpf();
+    } else if (documentType === 'cnpj') {
+        documentNumber = generateCnpj();
+    }
+
+    applyResultDocument(documentNumber);
+}
+
+function generateCpf() {
+    let cpf = '';
+    for (let i = 0; i < 9; i++) {
+        cpf += Math.floor(Math.random() * 10);
+    }
+    cpf += calculateCpfDigits(cpf);
+    return cpf;
+}
+
+function calculateCpfDigits(cpf) {
+    let sum = 0, rest;
+    // Calculate first digit
+    for (let i = 0; i < 9; i++) {
+        sum += parseInt(cpf.charAt(i)) * (10 - i);
+    }
+    rest = (sum * 10) % 11;
+    if (rest === 10 || rest === 11) rest = 0;
+    let digit1 = rest;
+
+    // Calculate second digit
+    sum = 0;
+    for (let i = 0; i < 9; i++) {
+        sum += parseInt(cpf.charAt(i)) * (11 - i);
+    }
+    sum += digit1 * 2;
+    rest = (sum * 10) % 11;
+    if (rest === 10 || rest === 11) rest = 0;
+    let digit2 = rest;
+
+    return digit1.toString() + digit2.toString();
+}
+
+function generateCnpj() {
+    let cnpj = '';
+    for (let i = 0; i < 12; i++) {
+        cnpj += Math.floor(Math.random() * 10);
+    }
+    cnpj += calculateCnpjDigits(cnpj);
+    return cnpj;
+}
+
+function calculateCnpjDigits(cnpj) {
+    let weights1 = [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+    let weights2 = [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2];
+
+    let sum = 0, rest;
+    // Calculate first digit
+    for (let i = 0; i < 12; i++) {
+        sum += parseInt(cnpj.charAt(i)) * weights1[i];
+    }
+    rest = (sum % 11);
+    let digit1 = (rest < 2) ? 0 : 11 - rest;
+
+    cnpj += digit1;
+
+    // Calculate second digit
+    sum = 0;
+    for (let i = 0; i < 13; i++) {
+        sum += parseInt(cnpj.charAt(i)) * weights2[i];
+    }
+    rest = (sum % 11);
+    let digit2 = (rest < 2) ? 0 : 11 - rest;
+
+    return digit1.toString() + digit2.toString();
+}
+
+function applyMaskDocument(documentNumber, documentType) {
+    if (documentType === 'cpf') {
+        return documentNumber.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, "$1.$2.$3-$4");
+    } else if (documentType === 'cnpj') {
+        return documentNumber.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, "$1.$2.$3/$4-$5");
+    }
+}
+
+function applyResultDocument(documentNumber) {
+    const mask = document.getElementById('mask').checked;
+    const documentType = document.getElementById('document-type').value;
+
+    if (mask) {
+        documentNumber = applyMaskDocument(documentNumber, documentType);
+    }
+
+    inpPassword.value = documentNumber;
+}
+
+document.getElementById('mask').addEventListener('change', () => {
+    const currentDocument = inpPassword.value.replace(/\D/g, '');
+    if (currentDocument) {
+        applyResultDocument(currentDocument);
+    }
+});
+
+document.getElementById('document-type').addEventListener('change', generateDocument);
