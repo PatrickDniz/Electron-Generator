@@ -16,9 +16,9 @@ const createWindow = () => {
     height: 768,           // Altura Padrão da Janela
     icon: __dirname + './assets/icon.png',  // Icone da Aplicação
     movable: true,          // A Janela pode ser movida?
-    resizable: false,       // A Janela pode ter suas dimensões redimensiondas?
+    resizable: true,       // A Janela pode ter suas dimensões redimensiondas?
     minimizable: true,      // A Janela pode ser Minimizada?
-    maximizable: false,     // A Janela pode ser Maximizada?
+    maximizable: true,     // A Janela pode ser Maximizada?
   });
 
   // Remove o Menu Superior [FILE, EDIT, VIEW, WINDOW, HELP]

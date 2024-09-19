@@ -5,51 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./../style/generator.css">
     <script src="./../controller/generator.js" defer></script>
-    <title>𝘨 𝘦 𝘳 𝘢 𝘵 𝘳 𝘰 𝘯</title>
+    <title>Electron Generator</title>
 </head>
 <body>
     <!-- HEADER -->
     <header>
-        <h1>GERATRON</h1>
-        <h2>Gerador de Senhas com Electron</h2>
+        <h1>Electron Generator</h1>
     </header>
 
-    <section id="section-body">
+    <main id="section-body">
     <!-- TOP SECTION (DISPLAY)         -->
-        <section id="section-display">
+        <section id="section-display" data-hidden="visible">
             <div>
                 <input id="inpPassword" readonly></input>
-                <button id="icoReload"><img src="../assets/reload.svg" alt="[ Recarregar ]"/></button>
+                <button id="icoHidden" data-hidden="visible">
+                    <svg class="svgVisible" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 576 512" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M572.52 241.4C518.29 135.59 410.93 64 288 64S57.68 135.64 3.48 241.41a32.35 32.35 0 0 0 0 29.19C57.71 376.41 165.07 448 288 448s230.32-71.64 284.52-177.41a32.35 32.35 0 0 0 0-29.19zM288 400a144 144 0 1 1 144-144 143.93 143.93 0 0 1-144 144zm0-240a95.31 95.31 0 0 0-25.31 3.79 47.85 47.85 0 0 1-66.9 66.9A95.78 95.78 0 1 0 288 160z"></path></svg>
+                    <svg class="svgHidden" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 640 512" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M320 400c-75.85 0-137.25-58.71-142.9-133.11L72.2 185.82c-13.79 17.3-26.48 35.59-36.72 55.59a32.35 32.35 0 0 0 0 29.19C89.71 376.41 197.07 448 320 448c26.91 0 52.87-4 77.89-10.46L346 397.39a144.13 144.13 0 0 1-26 2.61zm313.82 58.1l-110.55-85.44a331.25 331.25 0 0 0 81.25-102.07 32.35 32.35 0 0 0 0-29.19C550.29 135.59 442.93 64 320 64a308.15 308.15 0 0 0-147.32 37.7L45.46 3.37A16 16 0 0 0 23 6.18L3.37 31.45A16 16 0 0 0 6.18 53.9l588.36 454.73a16 16 0 0 0 22.46-2.81l19.64-25.27a16 16 0 0 0-2.82-22.45zm-183.72-142l-39.3-30.38A94.75 94.75 0 0 0 416 256a94.76 94.76 0 0 0-121.31-92.21A47.65 47.65 0 0 1 304 192a46.64 46.64 0 0 1-1.54 10l-73.61-56.89A142.31 142.31 0 0 1 320 112a143.92 143.92 0 0 1 144 144c0 21.63-5.29 41.79-13.9 60.11z"></path></svg>
+                </button>
+                <button id="icoCopy">
+                    <svg stroke="currentColor" fill="#c1c1c1" stroke-width="0" viewBox="0 0 448 512" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M384 336H192c-8.8 0-16-7.2-16-16V64c0-8.8 7.2-16 16-16l140.1 0L400 115.9V320c0 8.8-7.2 16-16 16zM192 384H384c35.3 0 64-28.7 64-64V115.9c0-12.7-5.1-24.9-14.1-33.9L366.1 14.1c-9-9-21.2-14.1-33.9-14.1H192c-35.3 0-64 28.7-64 64V320c0 35.3 28.7 64 64 64zM64 128c-35.3 0-64 28.7-64 64V448c0 35.3 28.7 64 64 64H256c35.3 0 64-28.7 64-64V416H272v32c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192c0-8.8 7.2-16 16-16H96V128H64z"></path></svg>
+                </button>
+                <button id="icoReload" data-selected="password"><img src="../assets/reload.svg" alt="[ Recarregar ]"/></button>
             </div>
             <div id="classifier"></div>
         </section>
 
         <!-- MID SECTION (GENERATOR)       -->
+        <section id="section-select">
+            <nav>
+                <div id="select-password" data-type="password" class="selected">Senha</div>
+                <div id="select-document" data-type="document">CPF/CNPJ</div>
+                <div id="select-phone" data-type="phone">Telefone</div>
+            </nav>
+        </section>
         <section id="section-generator">
-            <label for="inpCount">Quantidade de Caracteres:</label>
-            <div>
-                <input id="inpCount" type="range" min="3" max="64" step="1" value="16">
-                <span id="range-value"> = 16</span>
-            </div>
-            <div>
-                <input class="rdStyle" type="radio" value="1" name="rdStyle" id="rdStyle-1" checked> <label for="rdStyle-1"> Vale Tudo </label>
-                <input class="rdStyle" type="radio" value="2" name="rdStyle" id="rdStyle-2"> <label for="rdStyle-2"> Tira caracteres confusos: "Il1, o0O" </label>
-            </div>
-            <div>
-                <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="minor" checked> <label for="minor"> letras minúsculas </label>
-                <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="major" checked> <label for="major"> LETRAS MAIÚSCULAS </label>
-                <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="numbers" checked> <label for="numbers"> Núm3r0s </label>
-                <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="symbols" checked> <label for="symbols"> *%#$@! </label>
-            </div>
+            <section id="section-password" class="selected">
+                <label for="inpCount">Quantidade de Caracteres:</label>
+                <div>
+                    <input id="inpCount" type="range" min="3" max="64" step="1" value="16">
+                    <span id="range-value"> = 16</span>
+                </div>
+                <div>
+                    <input class="rdStyle" type="radio" value="1" name="rdStyle" id="rdStyle-1" checked> <label for="rdStyle-1"> Vale Tudo </label>
+                    <input class="rdStyle" type="radio" value="2" name="rdStyle" id="rdStyle-2"> <label for="rdStyle-2"> Tira caracteres confusos: "Il1, o0O" </label>
+                </div>
+                <div>
+                    <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="minor" checked> <label for="minor"> letras minúsculas </label>
+                    <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="major" checked> <label for="major"> LETRAS MAIÚSCULAS </label>
+                    <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="numbers" checked> <label for="numbers"> Núm3r0s </label>
+                    <input class="chkAlphabet" type="checkbox" name="chkAlphabet" id="symbols" checked> <label for="symbols"> *%#$@! </label>
+                </div>
+            </section>
+            <section id="section-document">
+                <div>
+                    <label for="document-type">Selecionar tipo de documento:</label>
+                    <select id="document-type">
+                        <option value="cpf">CPF</option>
+                        <option value="cnpj">CNPJ</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="mask">Aplicar Mascara:</label>
+                    <input type="checkbox" id="mask">
+                </div>
+            </section>
+            <section id="section-phone">
+                <div>
+                    <label for="num-caracteres">Quantidade de Caracteres:</label>
+                    <select id="num-caracteres">
+                        <option value="8">8</option>
+                        <option value="9">9</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="mascara">Aplicar Mascara:</label>
+                    <input type="checkbox" id="mascara">
+                </div>
+                <div>
+                    <label for="tipo-telefone">Tipo de Telefone:</label>
+                    <select id="tipo-telefone">
+                        <option value="celular">Celular</option>
+                        <option value="fixo">Fixo</option>
+                    </select>
+                </div>
+            </section>
         </section>
-
-        <!-- BOTTOM SECTION (COPY BUTTON)  -->
-        <section id="section-copy-button">
-            <button id="btnCopy">COPIAR SENHA</button>
-        </section>
-    </section>
+    </main>
 
     <!-- FOOTER -->
-    <footer><span> ༼ つ ◕_◕ ༽つ </span></footer>
+    <footer> 
+        <pre class="card" style="margin: 0; user-select: all; padding: 10px 0; white-space: pre-wrap;">
+        ─▄▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▀▄
+        █░░░█░░░░░░░░░░▄▄░██░█
+        █░▀▀█▀▀░▄▀░▄▀░░▀▀░▄▄░█
+        █░░░▀░░░▄▄▄▄▄░░██░▀▀░█
+        ─▀▄▄▄▄▄▀─────▀▄▄▄▄▄▄▀
+        </pre>
+    </footer>
 </body>
 </html>
